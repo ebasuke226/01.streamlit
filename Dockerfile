@@ -1,20 +1,10 @@
-# app/Dockerfile
+FROM python:3
 
-FROM python:3.9-slim
+COPY requirements.txt .
 
-EXPOSE 8501
+RUN pip3 install --upgrade pip && \
+    pip3 install --no-cache-dir -r requirements.txt && \
+    pip3 install jupyterlab
 
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    software-properties-common \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN git clone https://github.com/streamlit/streamlit-example.git .
-#RUN git clone https://github.com/ebasuke226/01.streamlit.git .
-
-RUN pip3 install -r requirements.txt
-
-ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+WORKDIR /src
+COPY /src /src
